@@ -149,12 +149,14 @@ export const getAdminById = async () => {
 };
 
 export const checkAvailability = async (movieId, slotId) => {
+  debugger
   const response = await fetch(`/movies/${movieId}/check-availability/${slotId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   })
+  console.log('there is one')
 
   if (!response.ok) {
     throw new Error("Failed to check availability")
