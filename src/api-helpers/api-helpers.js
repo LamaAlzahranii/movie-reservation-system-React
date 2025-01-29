@@ -147,3 +147,18 @@ export const getAdminById = async () => {
   const resData = await res.data;
   return resData;
 };
+
+export const checkAvailability = async (movieId, slotId) => {
+  const response = await fetch(`/movies/${movieId}/check-availability/${slotId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error("Failed to check availability")
+  }
+
+  return await response.json()
+}
