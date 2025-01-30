@@ -6,7 +6,7 @@ import { getMovieDetails, newBooking } from "../../api-helpers/api-helpers"
 
 const Booking = () => {
   const [movie, setMovie] = useState(null)
-  const [inputs, setInputs] = useState({ seatNumber: "", date: "", timeSlot: "" })
+  const [inputs, setInputs] = useState({ seatNumber: 0, date: "", timeSlot: "" })
   const [message, setMessage] = useState(null)
   const [loading, setLoading] = useState(true)
   const { id } = useParams()
@@ -29,18 +29,18 @@ const Booking = () => {
   const handleChange = e => {
     setInputs(prevState => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.name === "seatNumber" ? parseInt(e.target.value) : e.target.value,
     }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
-  
+
     if (!inputs.seatNumber || !inputs.date || !inputs.timeSlot) {
       setMessage({ type: "error", text: "الرجاء ملء جميع الحقول" })
       return
     }
-  
+
     try {
       const res = await newBooking({
         seatNumber: inputs.seatNumber,
@@ -49,19 +49,25 @@ const Booking = () => {
         movieId: movie._id,
         userId: userId,
       })
-  
+
       if (res && res.message === "تم الحجز بنجاح!") {
         setMessage({ type: "success", text: res.message })
-        setInputs({ seatNumber: "", date: "", timeSlot: "" })
+        setInputs({ seatNumber: 0, date: "", timeSlot: "" })
       } else {
-        setMessage({ type: "error", text: "حدث خطأ أثناء الحجز، حاول مجددًا!" })
+        setMessage({ type: "error", text: res.message || "حدث خطأ أثناء الحجز، حاول مجددًا!" })
       }
     } catch (err) {
+      console.log("Error Response:", err.response)
+      console.log("Error Data:", err.response?.data)
+      console.log("Error Message:", err.response?.data?.message)
+
       console.log(err.response?.data || err.message)
-      setMessage({ type: "error", text: "حدث خطأ أثناء الحجز، حاول مجددًا!" })
+      setMessage({
+        type: "error",
+        text: err.response?.data?.message || "حدث خطأ أثناء الحجز، حاول مجددًا!",
+      })
     }
   }
-  
 
   if (loading) {
     return (
