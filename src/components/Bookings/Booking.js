@@ -34,13 +34,13 @@ const Booking = () => {
   }
 
   const handleSubmit = async e => {
-    e.preventDefault()
-
+    e.preventDefault();
+  
     if (!inputs.seatNumber || !inputs.date || !inputs.timeSlot) {
-      setMessage({ type: "error", text: "الرجاء ملء جميع الحقول" })
-      return
+      setMessage({ type: "error", text: "الرجاء ملء جميع الحقول" });
+      return;
     }
-
+  
     try {
       const res = await newBooking({
         seatNumber: inputs.seatNumber,
@@ -48,26 +48,26 @@ const Booking = () => {
         timeSlot: inputs.timeSlot,
         movieId: movie._id,
         userId: userId,
-      })
-
+      });
+  
       if (res && res.message === "تم الحجز بنجاح!") {
-        setMessage({ type: "success", text: res.message })
-        setInputs({ seatNumber: 0, date: "", timeSlot: "" })
+        setMessage({ type: "success", text: res.message });
+        setInputs({ seatNumber: 0, date: "", timeSlot: "" });
+  
+        const updatedMovie = await getMovieDetails(id);
+        setMovie(updatedMovie.movie);
       } else {
-        setMessage({ type: "error", text: res.message || "حدث خطأ أثناء الحجز، حاول مجددًا!" })
+        setMessage({ type: "error", text: res.message || "حدث خطأ أثناء الحجز، حاول مجددًا!" });
       }
     } catch (err) {
-      console.log("Error Response:", err.response)
-      console.log("Error Data:", err.response?.data)
-      console.log("Error Message:", err.response?.data?.message)
-
-      console.log(err.response?.data || err.message)
+      console.log("Error Response:", err.response);
       setMessage({
         type: "error",
         text: err.response?.data?.message || "حدث خطأ أثناء الحجز، حاول مجددًا!",
-      })
+      });
     }
-  }
+  };
+  
 
   if (loading) {
     return (
