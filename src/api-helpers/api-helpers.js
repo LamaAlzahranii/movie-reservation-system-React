@@ -53,21 +53,30 @@ export const getMovieDetails = async (id) => {
 };
 
 export const newBooking = async (data) => {
-  const res = await axios
-    .post("/booking", {
-      movie: data.movie,
-      seatNumber: data.seatNumber,
-      date: data.date,
-      user: localStorage.getItem("userId"),
-    })
-    .catch((err) => console.log(err));
+  const { seatNumber, date, timeSlot, movieId } = data;  
 
-  if (res.status !== 201) {
-    return console.log("Unexpected Error");
+  try {
+    const res = await axios.post("/booking", {
+      seatNumber: seatNumber,
+      date: date,
+      timeSlot: timeSlot,  
+      movieId: movieId,    
+      userId: localStorage.getItem("userId"),  
+    });
+
+    if (res.status !== 201) {
+      console.log("Unexpected Error");
+      return;
+    }
+
+    const resData = res.data;
+    return resData;  
+  } catch (err) {
+    console.error("Error while booking:", err);
+    return { message: "حدث خطأ أثناء الحجز" };
   }
-  const resData = await res.data;
-  return resData;
 };
+
 
 export const getUserBooking = async () => {
   const id = localStorage.getItem("userId");
@@ -148,19 +157,23 @@ export const getAdminById = async () => {
   return resData;
 };
 
+
+
 export const checkAvailability = async (movieId, slotId) => {
-  debugger
-  const response = await fetch(`/movies/${movieId}/check-availability/${slotId}`, {
-    method: "GET",
+  const response = await axios.get(`/movies/${movieId}/slots/${slotId}/availability`);
+  if (!response.ok) throw new Error('فشل في التحقق من التوافر');
+  return response.json();
+};
+
+export const bookTimeSlot = async (movieId, slotId, seats) => {
+  const response = await axios.get(`/movies/${movieId}/slots/${slotId}/book`, {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-  })
-  console.log('there is one')
+    body: JSON.stringify({ seats }),
+  });
 
-  if (!response.ok) {
-    throw new Error("Failed to check availability")
-  }
-
-  return await response.json()
-}
+  if (!response.ok) throw new Error('فشل في الحجز');
+  return response.json();
+};

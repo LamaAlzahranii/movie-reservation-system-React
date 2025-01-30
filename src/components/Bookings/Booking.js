@@ -1,46 +1,64 @@
-import { Button, FormLabel, TextField, Typography, Alert } from "@mui/material";
-import { Box } from "@mui/system";
-import React, { Fragment, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getMovieDetails, newBooking } from "../../api-helpers/api-helpers";
+import { Button, FormLabel, TextField, Typography, Alert, Select, MenuItem, CircularProgress } from "@mui/material"
+import { Box } from "@mui/system"
+import React, { Fragment, useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import { getMovieDetails, newBooking } from "../../api-helpers/api-helpers"
 
 const Booking = () => {
-  const [movie, setMovie] = useState(null);
-  const [inputs, setInputs] = useState({ seatNumber: "", date: "" });
-  const [message, setMessage] = useState(null);
-  const { id } = useParams();
-  const userId = localStorage.getItem("userId");
+  const [movie, setMovie] = useState(null)
+  const [inputs, setInputs] = useState({ seatNumber: "", date: "", timeSlot: "" })
+  const [message, setMessage] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const { id } = useParams()
+  const userId = localStorage.getItem("userId")
 
   useEffect(() => {
+    setLoading(true)
     getMovieDetails(id)
-      .then((res) => setMovie(res.movie))
-      .catch((err) => console.log(err));
-  }, [id]);
+      .then(res => {
+        setMovie(res.movie)
+        setLoading(false)
+      })
+      .catch(err => {
+        console.log(err)
+        setMessage({ type: "error", text: "فشل تحميل بيانات الفيلم" })
+        setLoading(false)
+      })
+  }, [id])
 
-  const handleChange = (e) => {
-    setInputs((prevState) => ({
+  const handleChange = e => {
+    setInputs(prevState => ({
       ...prevState,
       [e.target.name]: e.target.value,
-    }));
-  };
+    }))
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async e => {
+    debugger
+    e.preventDefault()
 
-    if (!inputs.seatNumber || !inputs.date) {
-      setMessage({ type: "error", text: "الرجاء ملء جميع الحقول" });
-      return;
+    if (!inputs.seatNumber || !inputs.date || !inputs.timeSlot) {
+      setMessage({ type: "error", text: "الرجاء ملء جميع الحقول" })
+      return
     }
 
-    newBooking({ ...inputs, movie: movie._id, user: userId })
-      .then((res) => {
-        setMessage({ type: "success", text: "تم الحجز بنجاح!" });
-        setInputs({ seatNumber: "", date: "" });
-      })
-      .catch((err) => {
-        setMessage({ type: "error", text: "حدث خطأ أثناء الحجز، حاول مجددًا!" });
-      });
-  };
+    try {
+      await newBooking({ ...inputs, movie: movie._id, user: userId })
+      setMessage({ type: "success", text: "تم الحجز بنجاح!" })
+      setInputs({ seatNumber: 0, date: "", timeSlot: "" })
+    } catch (err) {
+      console.log(err.response?.data || err.message)
+      setMessage({ type: "error", text: "حدث خطأ أثناء الحجز، حاول مجددًا!" })
+    }
+  }
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" marginTop={5}>
+        <CircularProgress />
+      </Box>
+    )
+  }
 
   return (
     <div>
@@ -56,7 +74,7 @@ const Booking = () => {
               <Box width="80%" marginTop={3} padding={2}>
                 <Typography paddingTop={2}>{movie.description}</Typography>
                 <Typography fontWeight="bold" marginTop={1}>
-                  الممثلون: {movie.actors.join(", ")}
+                  الممثلون: {movie.actors?.join(", ") || "غير متوفر"}
                 </Typography>
                 <Typography fontWeight="bold" marginTop={1}>
                   تاريخ الإصدار: {new Date(movie.releaseDate).toDateString()}
@@ -84,6 +102,32 @@ const Booking = () => {
                     value={inputs.date}
                     onChange={handleChange}
                   />
+                  <FormLabel>اختر وقت العرض</FormLabel>
+                  <Select
+                    name="timeSlot"
+                    value={inputs.timeSlot}
+                    onChange={handleChange}
+                    displayEmpty
+                    margin="normal"
+                    variant="standard"
+                  >
+                    <MenuItem value="" disabled>
+                      اختر وقت العرض
+                    </MenuItem>
+                    {movie.timeSlots && movie.timeSlots.length > 0 ? (
+                      movie.timeSlots.map(slot => (
+                        <MenuItem key={slot._id} value={slot._id}>
+                          {new Date(slot.time).toLocaleTimeString("ar-EG", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}{" "}
+                          (المتبقي: {slot.capacity - slot.booked})
+                        </MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem disabled>لا توجد أوقات متاحة</MenuItem>
+                    )}
+                  </Select>
                   <Button type="submit" variant="contained" sx={{ mt: 3 }}>
                     احجز الآن
                   </Button>
@@ -94,11 +138,11 @@ const Booking = () => {
         </Fragment>
       ) : (
         <Typography textAlign="center" marginTop={5}>
-          جارٍ تحميل بيانات الفيلم...
+          لا توجد بيانات لهذا الفيلم.
         </Typography>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Booking;
+export default Booking
