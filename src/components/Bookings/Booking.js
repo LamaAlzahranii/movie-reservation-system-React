@@ -33,24 +33,35 @@ const Booking = () => {
     }))
   }
 
-  const handleSubmit = async e => {
-    debugger
+  const handleSubmit = async (e) => {
     e.preventDefault()
-
+  
     if (!inputs.seatNumber || !inputs.date || !inputs.timeSlot) {
       setMessage({ type: "error", text: "الرجاء ملء جميع الحقول" })
       return
     }
-
+  
     try {
-      await newBooking({ ...inputs, movie: movie._id, user: userId })
-      setMessage({ type: "success", text: "تم الحجز بنجاح!" })
-      setInputs({ seatNumber: 0, date: "", timeSlot: "" })
+      const res = await newBooking({
+        seatNumber: inputs.seatNumber,
+        date: inputs.date,
+        timeSlot: inputs.timeSlot,
+        movieId: movie._id,
+        userId: userId,
+      })
+  
+      if (res && res.message === "تم الحجز بنجاح!") {
+        setMessage({ type: "success", text: res.message })
+        setInputs({ seatNumber: "", date: "", timeSlot: "" })
+      } else {
+        setMessage({ type: "error", text: "حدث خطأ أثناء الحجز، حاول مجددًا!" })
+      }
     } catch (err) {
       console.log(err.response?.data || err.message)
       setMessage({ type: "error", text: "حدث خطأ أثناء الحجز، حاول مجددًا!" })
     }
   }
+  
 
   if (loading) {
     return (
