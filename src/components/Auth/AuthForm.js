@@ -81,7 +81,7 @@ const AuthForm = ({ onSubmit, isAdmin }) => {
             name="password"
           />
           <Button
-            sx={{ mt: 2, borderRadius: 10, bgcolor: "#2b2d42" }}
+            sx={{ mt: 2, borderRadius: 10, bgcolor: "#821d21" }}
             type="submit"
             fullWidth
             variant="contained"

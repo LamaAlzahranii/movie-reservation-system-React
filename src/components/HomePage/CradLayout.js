@@ -43,7 +43,7 @@ const CradLayout = ({ title, description, releaseDate, posterUrl, id }) => {
           variant="contained"
           sx={{
             margin: "auto",
-            bgcolor: "#2b2d42",
+            bgcolor: "#821d21",
             ":hover": {
               bgcolor: "#121217",
             },

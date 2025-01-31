@@ -118,7 +118,7 @@ const AddMovie = () => {
             sx={{
               width: "30%",
               margin: "auto",
-              bgcolor: "#2b2d42",
+              bgcolor: "#821d21",
               ":hover": {
                 bgcolor: "#121217",
               },

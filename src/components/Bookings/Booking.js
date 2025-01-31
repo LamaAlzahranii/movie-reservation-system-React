@@ -21,7 +21,7 @@ const Booking = () => {
       })
       .catch(err => {
         console.log(err)
-        setMessage({ type: "error", text: "فشل تحميل بيانات الفيلم" })
+        setMessage({ type: "error", text: "Failed to load movie data" })
         setLoading(false)
       })
   }, [id])
@@ -37,7 +37,7 @@ const Booking = () => {
     e.preventDefault()
 
     if (!inputs.seatNumber || !inputs.timeSlot) {
-      setMessage({ type: "error", text: "الرجاء ملء جميع الحقول" })
+      setMessage({ type: "error", text: "Please fill in all fields" })
       return
     }
 
@@ -49,20 +49,20 @@ const Booking = () => {
         userId: userId,
       })
 
-      if (res && res.message === "تم الحجز بنجاح!") {
+      if (res && res.message === "Booking successful") {
         setMessage({ type: "success", text: res.message })
         setInputs({ seatNumber: 0, timeSlot: "" })
 
         const updatedMovie = await getMovieDetails(id)
         setMovie(updatedMovie.movie)
       } else {
-        setMessage({ type: "error", text: res.message || "حدث خطأ أثناء الحجز، حاول مجددًا!" })
+        setMessage({ type: "error", text: res.message || "An error occurred during booking, please try again" })
       }
     } catch (err) {
       console.log("Error Response:", err.response)
       setMessage({
         type: "error",
-        text: err.response?.data?.message || "حدث خطأ أثناء الحجز، حاول مجددًا!",
+        text: err.response?.data?.message || "An error occurred during booking, please try again",
       })
     }
   }
@@ -80,7 +80,7 @@ const Booking = () => {
       {movie ? (
         <Fragment>
           <Typography padding={3} fontFamily="fantasy" variant="h4" textAlign="center">
-            احجز تذاكر لفيلم: {movie.title}
+            Book Movie Now : {movie.title}
           </Typography>
           {message && <Alert severity={message.type}>{message.text}</Alert>}
           <Box display="flex" justifyContent="center">
@@ -89,20 +89,20 @@ const Booking = () => {
               <Box width="80%" marginTop={3} padding={2}>
                 <Typography paddingTop={2}>{movie.description}</Typography>
                 <Typography fontWeight="bold" marginTop={1}>
-                  الممثلون: {movie.actors?.join(", ") || "غير متوفر"}
+                  Cast: {movie.actors?.join(", ") || "Unavailable"}
                 </Typography>
                 <Typography fontWeight="bold" marginTop={1}>
-                  تاريخ الإصدار: {new Date(movie.releaseDate).toDateString()}
+                  Release Date: {new Date(movie.releaseDate).toDateString()}
                 </Typography>
               </Box>
             </Box>
             <Box width="50%" paddingTop={3}>
               <Typography fontWeight="bold" marginTop={1}>
-                تاريخ العرض: {new Date(movie.date).toDateString()}
+                Showtime: {new Date(movie.date).toDateString()}
               </Typography>
               <form onSubmit={handleSubmit}>
                 <Box padding={5} margin="auto" display="flex" flexDirection="column">
-                  <FormLabel>رقم المقعد</FormLabel>
+                  <FormLabel>Seat Number</FormLabel>
                   <TextField
                     name="seatNumber"
                     value={inputs.seatNumber}
@@ -111,7 +111,7 @@ const Booking = () => {
                     margin="normal"
                     variant="standard"
                   />
-                  <FormLabel>اختر وقت العرض</FormLabel>
+                  <FormLabel>Select Showtime</FormLabel>
                   <Select
                     name="timeSlot"
                     value={inputs.timeSlot}
@@ -121,7 +121,7 @@ const Booking = () => {
                     variant="standard"
                   >
                     <MenuItem value="" disabled>
-                      اختر وقت العرض
+                      Select Showtime
                     </MenuItem>
                     {movie.timeSlots && movie.timeSlots.length > 0 ? (
                       movie.timeSlots.map(slot => (
@@ -130,15 +130,15 @@ const Booking = () => {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}{" "}
-                          (المتبقي: {slot.capacity - slot.booked})
+                          (Remaining: {slot.capacity - slot.booked})
                         </MenuItem>
                       ))
                     ) : (
-                      <MenuItem disabled>لا توجد أوقات متاحة</MenuItem>
+                      <MenuItem disabled>No available showtimes</MenuItem>
                     )}
                   </Select>
                   <Button type="submit" variant="contained" sx={{ mt: 3 }}>
-                    احجز الآن
+                    Book Now{" "}
                   </Button>
                 </Box>
               </form>
@@ -147,7 +147,7 @@ const Booking = () => {
         </Fragment>
       ) : (
         <Typography textAlign="center" marginTop={5}>
-          لا توجد بيانات لهذا الفيلم.
+          No data available for this movie{" "}
         </Typography>
       )}
     </div>

@@ -13,9 +13,9 @@ const HomePage = () => {
   }, []);
   return (
     <Box width={"100%"} height="100%" margin="auto" marginTop={2}>
-      <Box margin={"auto"} width="80%" height={"40vh"} padding={2}>
+      <Box margin={"auto"} width="80%" height={"50vh"} padding={2}>
         <img
-          src="https://i.ytimg.com/vi/bweRG6WueuM/maxresdefault.jpg"
+          src="http://camposolonline.com/wp-content/uploads/2018/01/cinema-header.jpg"
           alt="Brahmastra"
           width={"100%"}
           height={"100%"}
@@ -52,7 +52,7 @@ const HomePage = () => {
           LinkComponent={Link}
           to="/movies"
           variant="outlined"
-          sx={{ margin: "auto", color: "#2b2d42" }}
+          sx={{ margin: "auto", color: "#821d21" }}
         >
           View All Movies
         </Button>

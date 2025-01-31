@@ -88,7 +88,7 @@ const AdminAuth = () => {
             placeholder="Password"
           />
           <Button
-            sx={{ borderRadius: 10, mt: 2, bgcolor: "#2b2d42" }}
+            sx={{ borderRadius: 10, mt: 2, bgcolor: "#821d21" }}
             type="submit"
             fullWidth
             variant="contained"

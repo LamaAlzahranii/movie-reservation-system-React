@@ -19,12 +19,12 @@ const MovieItem = ({ title, releaseDate, posterUrl, id }) => {
           to={`/booking/${id}`}
           sx={{
             margin: "auto",
-            bgcolor: "#2b2d42",
+            bgcolor: "#821d21",
             ":hover": { bgcolor: "#121217" },
           }}
           size="small"
         >
-          احجز الان{" "}
+        Book Now
         </Button>
       </CardActions>
     </Card>

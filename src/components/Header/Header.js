@@ -37,7 +37,7 @@ const Header = () => {
     }
   };
   return (
-    <AppBar position="sticky" sx={{ bgcolor: "#2b2d42" }}>
+    <AppBar position="sticky" sx={{ bgcolor: "#821d21" }}>
       <Toolbar>
         <Box width="20%">
           <Link to="/" style={{ color: "white" }}>
@@ -57,7 +57,7 @@ const Header = () => {
                 sx={{
                   borderRadius: 2,
                   input: { color: "white" },
-                  bgcolor: "#2b2d42",
+                  bgcolor: "#821d21",
                   padding: "6px",
                 }}
                 variant="standard"

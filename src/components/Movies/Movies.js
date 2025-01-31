@@ -18,7 +18,7 @@ const Movies = () => {
         setLoading(false)
       })
       .catch(err => {
-        setError("فشل في تحميل الأفلام.")
+        setError("Failed to load movies")
         setLoading(false)
       })
   }, [])
@@ -30,17 +30,17 @@ const Movies = () => {
       setSelectedMovie(movieId)
       setSelectedSlot(timeSlotId)
     } catch (err) {
-      setError("فشل في التحقق من التوافر.")
+      setError("Failed to check availability")
     }
   }
 
   return (
     <Box margin="auto" marginTop={4}>
-      <Typography variant="h4" padding={2} width="40%" bgcolor="#900C3F" color="white" textAlign="center">
-        جميع الأفلام
+      <Typography variant="h4" padding={2} color="black" textAlign="center">
+        All Movies
       </Typography>
 
-      <Box width="100%" margin="auto" marginTop={5} display="flex" justifyContent="flex-start" flexWrap="wrap">
+      <Box width="100%" margin="auto" marginTop={5} display="flex" justifyContent="center" flexWrap="wrap">
         {loading && <CircularProgress sx={{ margin: "auto" }} />}
         {error && <Alert severity="error">{error}</Alert>}
 
@@ -58,14 +58,14 @@ const Movies = () => {
 
       {selectedMovie && selectedSlot && availability !== null && (
         <Box marginTop={4}>
-          <Typography variant="h5">المقاعد المتاحة: {availability}</Typography>
+          <Typography variant="h5"> Available Seats:{availability}</Typography>
           <Button
             variant="contained"
             color="primary"
-            onClick={() => alert("الانتقال إلى صفحة الحجز")}
+            onClick={() => alert("Go to Booking Page")}
             disabled={availability === 0}
           >
-            متابعة الحجز
+            Proceed with Booking
           </Button>
         </Box>
       )}

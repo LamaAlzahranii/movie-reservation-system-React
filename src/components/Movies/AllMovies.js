@@ -71,7 +71,6 @@ const AllMovies = () => {
                         تحقق من التوفر
                       </Button>
 
-                      {/* زر الحجز */}
                       {slot.booked < slot.capacity ? (
                         <Button
                           variant="contained"
@@ -79,8 +78,7 @@ const AllMovies = () => {
                           onClick={() => handleBooking(movie._id, slot._id)}
                           sx={{ marginLeft: 1 }}
                         >
-                          احجز الآن
-                        </Button>
+                        Book Now                        </Button>
                       ) : (
                         <Typography color="error">ممتلئ</Typography>
                       )}

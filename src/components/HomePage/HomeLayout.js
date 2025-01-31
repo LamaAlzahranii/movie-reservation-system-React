@@ -54,7 +54,7 @@ const HomeLayout = () => {
           variant="outlined"
           LinkComponent={Link}
           to="/movies"
-          sx={{ margin: "auto", color: "#2b2d42" }}
+          sx={{ margin: "auto", color: "#821d21" }}
         >
           View All Movies
         </Button>
