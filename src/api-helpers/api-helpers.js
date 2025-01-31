@@ -53,7 +53,7 @@ export const getMovieDetails = async id => {
 }
 
 export const newBooking = async data => {
-  const { seatNumber, date, timeSlot, movieId } = data
+  const { seatNumber, date, timeSlot, movieId } = data;
 
   try {
     const res = await axios.post("/booking", {
@@ -62,20 +62,20 @@ export const newBooking = async data => {
       timeSlot,
       movieId,
       userId: localStorage.getItem("userId"),
-    })
+    });
 
-    if (res.status !== 201) {
-      console.log("Unexpected Error")
-      return
+    if (res.status === 201) {
+      return { message: res.data.message, type: "success" };
+    } else {
+      return { message: "Unexpected Error", type: "error" };
     }
-
-    return res.data
   } catch (err) {
-    console.error("Error while booking:", err)
-    console.error("Error Response Data:", err.response?.data)
-    return { message: err.response?.data?.message || "حدث خطأ أثناء الحجز" }
+    console.error("Error while booking:", err);
+    console.error("Error Response Data:", err.response?.data);
+    return { message: err.response?.data?.message || "Error while booking", type: "error" };
   }
-}
+};
+
 
 export const getUserBooking = async () => {
   const id = localStorage.getItem("userId")
@@ -154,18 +154,5 @@ export const getAdminById = async () => {
 export const checkAvailability = async (movieId, slotId) => {
   const response = await axios.get(`/movies/${movieId}/slots/${slotId}/availability`)
   if (!response.ok) throw new Error("فشل في التحقق من التوافر")
-  return response.json()
-}
-
-export const bookTimeSlot = async (movieId, slotId, seats) => {
-  const response = await axios.get(`/movies/${movieId}/slots/${slotId}/book`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ seats }),
-  })
-
-  if (!response.ok) throw new Error("فشل في الحجز")
   return response.json()
 }

@@ -79,7 +79,7 @@ const Booking = () => {
     <div>
       {movie ? (
         <Fragment>
-          <Typography padding={3} fontFamily="fantasy" variant="h4" textAlign="center">
+          <Typography padding={3}  variant="h4" textAlign="center">
             Book Movie Now : {movie.title}
           </Typography>
           {message && <Alert severity={message.type}>{message.text}</Alert>}
