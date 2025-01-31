@@ -10,9 +10,6 @@ const MovieItem = ({ title, releaseDate, posterUrl, id }) => {
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {new Date(releaseDate).toDateString()}
-        </Typography>
       </CardContent>
       <CardActions>
         <Button

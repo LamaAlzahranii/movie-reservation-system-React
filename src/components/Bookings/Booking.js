@@ -6,7 +6,7 @@ import { getMovieDetails, newBooking } from "../../api-helpers/api-helpers"
 
 const Booking = () => {
   const [movie, setMovie] = useState(null)
-  const [inputs, setInputs] = useState({ seatNumber: 0, date: "", timeSlot: "" })
+  const [inputs, setInputs] = useState({ seatNumber: 0, timeSlot: "" })
   const [message, setMessage] = useState(null)
   const [loading, setLoading] = useState(true)
   const { id } = useParams()
@@ -34,40 +34,38 @@ const Booking = () => {
   }
 
   const handleSubmit = async e => {
-    e.preventDefault();
-  
-    if (!inputs.seatNumber || !inputs.date || !inputs.timeSlot) {
-      setMessage({ type: "error", text: "الرجاء ملء جميع الحقول" });
-      return;
+    e.preventDefault()
+
+    if (!inputs.seatNumber || !inputs.timeSlot) {
+      setMessage({ type: "error", text: "الرجاء ملء جميع الحقول" })
+      return
     }
-  
+
     try {
       const res = await newBooking({
         seatNumber: inputs.seatNumber,
-        date: inputs.date,
         timeSlot: inputs.timeSlot,
         movieId: movie._id,
         userId: userId,
-      });
-  
+      })
+
       if (res && res.message === "تم الحجز بنجاح!") {
-        setMessage({ type: "success", text: res.message });
-        setInputs({ seatNumber: 0, date: "", timeSlot: "" });
-  
-        const updatedMovie = await getMovieDetails(id);
-        setMovie(updatedMovie.movie);
+        setMessage({ type: "success", text: res.message })
+        setInputs({ seatNumber: 0, timeSlot: "" })
+
+        const updatedMovie = await getMovieDetails(id)
+        setMovie(updatedMovie.movie)
       } else {
-        setMessage({ type: "error", text: res.message || "حدث خطأ أثناء الحجز، حاول مجددًا!" });
+        setMessage({ type: "error", text: res.message || "حدث خطأ أثناء الحجز، حاول مجددًا!" })
       }
     } catch (err) {
-      console.log("Error Response:", err.response);
+      console.log("Error Response:", err.response)
       setMessage({
         type: "error",
         text: err.response?.data?.message || "حدث خطأ أثناء الحجز، حاول مجددًا!",
-      });
+      })
     }
-  };
-  
+  }
 
   if (loading) {
     return (
@@ -99,6 +97,9 @@ const Booking = () => {
               </Box>
             </Box>
             <Box width="50%" paddingTop={3}>
+              <Typography fontWeight="bold" marginTop={1}>
+                تاريخ العرض: {new Date(movie.date).toDateString()}
+              </Typography>
               <form onSubmit={handleSubmit}>
                 <Box padding={5} margin="auto" display="flex" flexDirection="column">
                   <FormLabel>رقم المقعد</FormLabel>
@@ -109,15 +110,6 @@ const Booking = () => {
                     type="number"
                     margin="normal"
                     variant="standard"
-                  />
-                  <FormLabel>تاريخ الحجز</FormLabel>
-                  <TextField
-                    name="date"
-                    type="date"
-                    margin="normal"
-                    variant="standard"
-                    value={inputs.date}
-                    onChange={handleChange}
                   />
                   <FormLabel>اختر وقت العرض</FormLabel>
                   <Select

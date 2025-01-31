@@ -120,6 +120,7 @@ export const addMovie = async data => {
         posterUrl: data.posterUrl,
         fetaured: data.fetaured,
         actors: data.actors,
+        date: data.date,
         admin: localStorage.getItem("adminId"),
       },
       {
