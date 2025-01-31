@@ -1,9 +1,8 @@
 import { Box } from "@mui/system";
 import React, { Fragment, useEffect, useState } from "react";
-import { deleteBooking, getUserBooking, getUserDetails } from "../api-helpers/api-helpers";
+import {  getUserBooking, getUserDetails } from "../api-helpers/api-helpers";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { IconButton, List, ListItem, ListItemText, Typography } from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import {  List, ListItem, ListItemText, Typography } from "@mui/material";
 
 const UserProfile = () => {
   const [bookings, setBookings] = useState();
@@ -19,12 +18,7 @@ const UserProfile = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const handleDelete = (id) => {
-    deleteBooking(id)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
-
+  
   return (
     <Box width={"100%"} display="flex">
       <Fragment>
@@ -46,7 +40,6 @@ const UserProfile = () => {
           </Box>
         )}
 
-        {/* عرض الحجز للمستخدم */}
         {bookings && (
           <Box width={"70%"} display="flex" flexDirection={"column"}>
             <Typography variant="h3" fontFamily={"verdana"} textAlign="center" padding={2}>
@@ -71,11 +64,9 @@ const UserProfile = () => {
                       Seat: {booking.seatNumber}
                     </ListItemText>
                     <ListItemText sx={{ margin: 1, width: "auto", textAlign: "left" }}>
-                      Date: {new Date(booking.movieDate).toDateString()} {/* عرض تاريخ الفيلم */}
+                      Date: {new Date(booking.movieDate).toDateString()} 
                     </ListItemText>
-                    <IconButton onClick={() => handleDelete(booking._id)} color="error">
-                      <DeleteForeverIcon />
-                    </IconButton>
+                  
                   </ListItem>
                 ))}
               </List>

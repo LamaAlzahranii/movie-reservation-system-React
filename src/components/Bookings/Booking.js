@@ -1,4 +1,14 @@
-import { Button, FormLabel, TextField, Typography, Alert, Select, MenuItem, CircularProgress } from "@mui/material"
+import {
+  Button,
+  FormLabel,
+  TextField,
+  Typography,
+  Snackbar,
+  Alert,
+  Select,
+  MenuItem,
+  CircularProgress,
+} from "@mui/material"
 import { Box } from "@mui/system"
 import React, { Fragment, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
@@ -53,6 +63,7 @@ const Booking = () => {
         setMessage({ type: "success", text: res.message })
         setInputs({ seatNumber: 0, timeSlot: "" })
 
+        // تحديث تفاصيل الفيلم وتوقيتات العرض بعد الحجز
         const updatedMovie = await getMovieDetails(id)
         setMovie(updatedMovie.movie)
       } else {
@@ -79,10 +90,20 @@ const Booking = () => {
     <div>
       {movie ? (
         <Fragment>
-          <Typography padding={3}  variant="h4" textAlign="center">
+          <Typography padding={3} variant="h4" textAlign="center">
             Book Movie Now : {movie.title}
           </Typography>
-          {message && <Alert severity={message.type}>{message.text}</Alert>}
+          {/* Snackbar for messages */}
+          <Snackbar
+            open={message !== null}
+            autoHideDuration={6000}
+            onClose={() => setMessage(null)}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }} // This positions the Snackbar at the top
+          >
+            <Alert severity={message?.type} onClose={() => setMessage(null)}>
+              {message?.text}
+            </Alert>
+          </Snackbar>
           <Box display="flex" justifyContent="center">
             <Box display="flex" flexDirection="column" paddingTop={3} width="50%" marginRight="auto">
               <img width="80%" height="300px" src={movie.posterUrl} alt={movie.title} />
@@ -111,7 +132,7 @@ const Booking = () => {
                     margin="normal"
                     variant="standard"
                   />
-                  <FormLabel>Select Showtime</FormLabel>
+                  <FormLabel>Select time</FormLabel>
                   <Select
                     name="timeSlot"
                     value={inputs.timeSlot}
@@ -121,12 +142,12 @@ const Booking = () => {
                     variant="standard"
                   >
                     <MenuItem value="" disabled>
-                      Select Showtime
+                      Select time
                     </MenuItem>
                     {movie.timeSlots && movie.timeSlots.length > 0 ? (
                       movie.timeSlots.map(slot => (
                         <MenuItem key={slot._id} value={slot._id}>
-                          {new Date(slot.time).toLocaleTimeString("ar-EG", {
+                          {new Date(slot.time).toLocaleTimeString("EG", {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}{" "}
