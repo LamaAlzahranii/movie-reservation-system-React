@@ -23,7 +23,7 @@ const Header = () => {
   const isUserLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [value, setValue] = useState("");
   const [movies, setMovies] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null); // إضافة حالة للرسالة
+  const [errorMessage, setErrorMessage] = useState(null); 
 
   useEffect(() => {
     getAllMovies()
@@ -34,11 +34,11 @@ const Header = () => {
   useEffect(() => {
     if (errorMessage) {
       const timer = setTimeout(() => {
-        setErrorMessage(null); // إخفاء الرسالة بعد ثانية
+        setErrorMessage(null); 
       }, 1000);
-      return () => clearTimeout(timer); // تنظيف المؤقت عند تغيير الرسالة
+      return () => clearTimeout(timer); 
     }
-  }, [errorMessage]); // تأثير يعتمد على تغيير errorMessage
+  }, [errorMessage]); 
 
   const logout = (isAdmin) => {
     dispatch(isAdmin ? adminActions.logout() : userActions.logout());
@@ -68,7 +68,7 @@ const Header = () => {
       <Toolbar>
         <Box width={"20%"}>
           <IconButton LinkComponent={Link} to="/">
-            <h7>Cinema</h7> <MovieIcon />
+             <MovieIcon />
           </IconButton>
         </Box>
         <Box width={"30%"} margin="auto">

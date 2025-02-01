@@ -58,7 +58,7 @@ const UserProfile = () => {
                     }}
                   >
                     <ListItemText sx={{ margin: 1, width: "auto", textAlign: "left" }}>
-                      Movie: {booking.movie.title}
+                      Movie: {booking?.movie?.title}
                     </ListItemText>
                     <ListItemText sx={{ margin: 1, width: "auto", textAlign: "left" }}>
                       Seat: {booking.seatNumber}
