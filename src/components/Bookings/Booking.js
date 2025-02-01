@@ -119,7 +119,7 @@ const Booking = () => {
             </Box>
             <Box width="50%" paddingTop={3}>
               <Typography fontWeight="bold" marginTop={1}>
-                Showtime: {new Date(movie.date).toDateString()}
+                Show time: {new Date(movie.date).toDateString()}
               </Typography>
               <form onSubmit={handleSubmit}>
                 <Box padding={5} margin="auto" display="flex" flexDirection="column">
@@ -155,12 +155,23 @@ const Booking = () => {
                         </MenuItem>
                       ))
                     ) : (
-                      <MenuItem disabled>No available showtimes</MenuItem>
+                      <MenuItem disabled>No available show times</MenuItem>
                     )}
                   </Select>
-                  <Button type="submit" variant="contained" sx={{ mt: 3 }}>
-                    Book Now{" "}
-                  </Button>
+                  <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    mt: 3,
+                    bgcolor: "#821d21",
+                    "&:hover": {
+                      bgcolor: "#000", 
+                    },
+                    borderRadius: 1,
+                  }}
+                >
+                  Book Now
+                </Button>
                 </Box>
               </form>
             </Box>
